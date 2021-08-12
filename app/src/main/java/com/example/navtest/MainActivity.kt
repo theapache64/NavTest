@@ -9,7 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Warning
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
@@ -19,7 +23,15 @@ import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
 import com.example.navtest.ui.theme.NavTestTheme
 
+
+data class BottomMenuItem(
+    val counterId: String,
+    val title: String
+)
+
 class MainActivity : ComponentActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -45,8 +57,8 @@ class MainActivity : ComponentActivity() {
                         bottomBar = {
                             BottomMenu(menuItems) {
                                 // menu clicked
-                                navController.navigate("counter/${it.counterId}"){
-
+                                navController.navigate("counter/${it.counterId}") {
+                                    // launchSingleTop = true
                                 }
                             }
                         }
@@ -100,7 +112,7 @@ class MainActivity : ComponentActivity() {
         ) {
             Text(text = "CounterId: '$counterId'", fontSize = 25.sp)
 
-            var count by remember { mutableStateOf(0) }
+            var count by rememberSaveable { mutableStateOf(0) }
             Button(onClick = { count++ }) {
                 Text(text = "$count")
             }
